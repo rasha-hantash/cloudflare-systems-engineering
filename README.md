@@ -25,3 +25,16 @@ Flags:
 ```
 I saw that the average time it took to request a workers website was much faster than requesting a popular website
 ```
+
+## To Run
+```
+make build
+./bin/main.go <website> [flags]
+
+Example
+./bin/main.go www.google.com/
+./bin/main.go mini-santorini.rasha-hantash.workers.dev/links --profile 3
+./bin/main.go --help
+go run main.go www.youtube.com/
+
+```
