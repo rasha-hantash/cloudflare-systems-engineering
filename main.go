@@ -14,8 +14,7 @@ var (
 	profileFlag int
 	rootCmd = &cobra.Command{
 		Use: "go run cli.go <website you want to visit> ", //name of the command
-		Short: "An example cobra program", // short description of the command
-		Long: `This is a simple example of a cobra progam.`,
+		Long: `This is a simple CLI tool that makes a request to your links page.`,
 		Args: cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args [] string) {
 			if profileFlag > 0 { 
@@ -99,7 +98,12 @@ func URLRequest(url[] string) (int, time.Duration, int, string) {
 	}
 	defer conn.Close()
 	buf := make([]byte, 0, 4096) // big buffer
-	fmt.Fprintf(conn, "GET /" + stringURL[1] + " HTTP/1.1\r\nHost: "+ stringURL[0]+ "\r\nConnection: Close\r\n\r\n")
+	if len(stringURL) > 1 {
+		fmt.Fprintf(conn, "GET /" + stringURL[1] + " HTTP/1.1\r\nHost: "+ stringURL[0]+ "\r\nConnection: Close\r\n\r\n")
+	} else {
+		fmt.Fprintf(conn, "GET / HTTP/1.1\r\nHost: "+ stringURL[0]+ "\r\nConnection: Close\r\n\r\n")
+	}
+	
 	endTime := time.Now()
 	timeTaken := endTime.Sub(startTime)
 	for {
@@ -116,6 +120,7 @@ func URLRequest(url[] string) (int, time.Duration, int, string) {
 
 	}
 	s := string(buf)
+	// fmt.Println(s)
 	result := strings.Split(s,"\n")
 	fmt.Println(result[len(result)-1])
 
